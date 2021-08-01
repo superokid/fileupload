@@ -1,0 +1,28 @@
+.c-file-upload {
+}
+
+.c-file-upload label {
+  min-width: 200px;
+  display: inline-flex;
+  position: relative;
+  text-overflow: ellipsis;
+}
+
+.c-file-upload__input {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.c-file-upload-list__item {
+  display: flex;
+}
+
+.c-file-upload-list__text {
+  text-overflow: ellipsis;
+  width: 100px;
+  overflow: hidden;
+  white-space: nowrap;
+}
