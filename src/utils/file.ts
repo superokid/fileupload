@@ -1,6 +1,6 @@
-export const bytesToSize = (bytes: number): string => {
+export const bytesToSize = (bytes: number | undefined): string => {
   const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  if (bytes === 0) return '0 B';
+  if (bytes === 0 || bytes === undefined) return '0 B';
   let i = Math.floor(Math.log(bytes) / Math.log(1024));
   if (i > 4) {
     i = 4;

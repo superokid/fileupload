@@ -5,10 +5,8 @@ export interface FileUploadedListItem {
   id?: number | string;
   name: string;
   status: 'loading' | 'done';
-  progress: {
-    current: number;
-    total: number;
-  };
+  progressCurrent: number;
+  progressTotal: number;
   file: File;
 }
 
@@ -44,10 +42,8 @@ const FileUpload: React.FC<Props> = ({
             name: item.name,
             status: 'loading',
             file: item,
-            progress: {
-              current: 0,
-              total: item.size,
-            },
+            progressCurrent: 0,
+            progressTotal: item.size,
           };
         }
       );

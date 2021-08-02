@@ -16,10 +16,8 @@ describe('<FileUploadList />', () => {
       {
         name: 'name1',
         status: 'loading',
-        progress: {
-          current: 10,
-          total: 20,
-        },
+        progressCurrent: 10,
+        progressTotal: 20,
         file: fileMock,
       },
     ];
