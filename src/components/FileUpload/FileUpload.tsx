@@ -4,7 +4,7 @@ import './FileUpload.css';
 export interface FileUploadedListItem {
   id?: number | string;
   name: string;
-  status: 'loading' | 'done';
+  status: 'loading' | 'success';
   progressCurrent: number;
   progressTotal: number;
   file: File;
