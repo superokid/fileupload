@@ -1,11 +1,25 @@
 .c-file-upload {
 }
 
-.c-file-upload label {
+.c-file-upload__label {
+  display: flex;
+}
+
+.c-file-upload__container {
   min-width: 200px;
   display: inline-flex;
   position: relative;
+  border: 1px solid #188be3;
+  padding: 4px 6px;
+  overflow: hidden;
+  width: 100%;
+  white-space: nowrap;
   text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.c-file-upload__placeholder--default {
+  color: #666;
 }
 
 .c-file-upload__input {
@@ -16,13 +30,32 @@
   width: 100%;
 }
 
+.c-file-upload__icon {
+  margin-left: 8px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.c-file-upload-list__icon {
+  object-fit: contain;
+  margin-right: 0.5em;
+}
+
 .c-file-upload-list__item {
   display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  margin: 2px 0;
+  padding: 6px 6px;
 }
 
 .c-file-upload-list__text {
   text-overflow: ellipsis;
-  width: 100px;
+  flex-grow: 1;
   overflow: hidden;
   white-space: nowrap;
+}
+
+.c-file-upload-list__progress {
+  min-width: 140px;
 }

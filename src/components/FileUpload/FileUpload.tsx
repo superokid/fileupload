@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ImgIconFolder from '../../assets/folder.png';
 import './FileUpload.css';
 
 export interface FileUploadedListItem {
@@ -55,29 +56,38 @@ const FileUpload: React.FC<Props> = ({
     }
   };
 
-  const getFileName = (uploadList?: FileList) => {
+  const renderFileName = (uploadList?: FileList) => {
     if (uploadList?.length) {
       return Object.values(uploadList).reduce((acc, curr) => {
         return acc + curr.name;
       }, '');
     }
-    return 'Select a file';
+    return (
+      <span className="c-file-upload__placeholder--default">Select a file</span>
+    );
   };
 
   return (
     <div className="c-file-upload">
-      <label>
-        <div>{getFileName(uploadList)}</div>
-        <input
-          className="c-file-upload__input"
-          type="file"
-          multiple={multiple}
-          accept={accept}
-          onChange={handleSelectFile}
-          data-testid="fileInput"
-        />
+      <label className="c-file-upload__label">
+        <div className="c-file-upload__container">
+          <div className="c-file-upload__placeholder">
+            {renderFileName(uploadList)}
+          </div>
+          <input
+            className="c-file-upload__input"
+            type="file"
+            multiple={multiple}
+            accept={accept}
+            onChange={handleSelectFile}
+            data-testid="fileInput"
+          />
+        </div>
+        <img className="c-file-upload__icon" src={ImgIconFolder} width="20" />
       </label>
-      <button onClick={handleUpload}>Upload</button>
+      <button className="c-button" onClick={handleUpload}>
+        Upload
+      </button>
       {render && render(uploadedFileList)}
     </div>
   );

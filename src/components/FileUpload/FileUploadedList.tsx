@@ -7,6 +7,7 @@ import {
   cancelPostFile,
 } from '../../store/features/fileupload';
 import ImgLoading from '../../assets/loading.gif';
+import ImgSuccess from '../../assets/check.png';
 
 interface Props {
   files?: FileUploadedListItem[];
@@ -22,13 +23,31 @@ const FileUploadedList: React.FC<Props> = () => {
     dispatch(cancelPostFile(name));
   };
 
+  if (!files.length) {
+    return null;
+  }
+
   return (
     <div className="c-file-upload-list">
+      <div>Current uploads</div>
       {files.map((item) => (
         <div key={item.name} className="c-file-upload-list__item">
           <div className="c-file-upload-list__text">{item.name}</div>
           {item.status === 'loading' && (
-            <img src={ImgLoading} alt="loading-icon" width="15" />
+            <img
+              className="c-file-upload-list__icon"
+              src={ImgLoading}
+              alt="loading-icon"
+              width="14"
+            />
+          )}
+          {item.status === 'success' && (
+            <img
+              className="c-file-upload-list__icon"
+              src={ImgSuccess}
+              alt="done-icon"
+              width="14"
+            />
           )}
           <div className="c-file-upload-list__progress">
             {`${bytesToSize(item.progressCurrent)} / ${bytesToSize(

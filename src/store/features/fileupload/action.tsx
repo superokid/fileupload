@@ -10,6 +10,7 @@ import {
 } from './type';
 import { toast } from 'react-toastify';
 import { ReduxState } from '../../index';
+import { bytesToSize } from '../../../utils/file';
 
 const CancelToken = axios.CancelToken;
 
@@ -20,16 +21,23 @@ export const postFile =
     try {
       dispatch({
         type: POST_FILE.success,
-        payload: Object.values(files).map((item: File) => {
+        payload: Object.values(files).map((file: File) => {
           return {
-            name: item.name,
+            name: file.name,
             status: 'loading',
-            file: item,
+            file: file,
             progressCurrent: 0,
-            progressTotal: item.size,
-            toast: toast(<CustomToast text="loading" status="loading" />, {
-              toastId: item.name,
-            }),
+            progressTotal: file.size,
+            toast: toast(
+              <CustomToast
+                text="loading"
+                subtitle={bytesToSize(file.size)}
+                status="loading"
+              />,
+              {
+                toastId: file.name,
+              }
+            ),
           };
         }),
       });
@@ -53,7 +61,13 @@ export const postFile =
 
             if (isFinished) {
               toast.update(file.name, {
-                render: () => <CustomToast text={status} status={status} />,
+                render: () => (
+                  <CustomToast
+                    text={file.name}
+                    subtitle={bytesToSize(file.size)}
+                    status={status}
+                  />
+                ),
               });
             }
 
@@ -69,7 +83,13 @@ export const postFile =
           },
           cancelToken: new CancelToken(function executor(cancelFunc) {
             toast.update(file.name, {
-              render: () => <CustomToast text={file.name} status="loading" />,
+              render: () => (
+                <CustomToast
+                  text={file.name}
+                  subtitle={bytesToSize(file.size)}
+                  status="loading"
+                />
+              ),
             });
             dispatch({
               type: POST_FILE_CANCEL.success,
