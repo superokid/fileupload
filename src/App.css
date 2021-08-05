@@ -8,12 +8,23 @@ label {
 }
 
 .widget-container {
-  width: 400px;
+  width: 100%;
   background-color: #fff;
   padding: 1em;
   box-shadow: 8px 9px 16px -8px rgba(70, 70, 70, 0.4);
   height: 100%;
   box-sizing: border-box;
+  overflow: auto;
+}
+
+@media (min-width: 600px) {
+  .widget-container {
+    width: 400px;
+  }
+}
+
+.toast-container {
+  width: 90%;
 }
 
 .mr-1 {

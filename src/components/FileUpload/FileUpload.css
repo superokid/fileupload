@@ -3,6 +3,7 @@
 
 .c-file-upload__label {
   display: flex;
+  margin-bottom: 10px;
 }
 
 .c-file-upload__container {
@@ -57,5 +58,5 @@
 }
 
 .c-file-upload-list__progress {
-  min-width: 140px;
+  min-width: 130px;
 }

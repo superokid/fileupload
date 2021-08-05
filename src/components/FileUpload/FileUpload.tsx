@@ -1,33 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import ImgIconFolder from '../../assets/folder.png';
 import './FileUpload.css';
-
-export interface FileUploadedListItem {
-  id?: number | string;
-  name: string;
-  status: 'loading' | 'success';
-  progressCurrent: number;
-  progressTotal: number;
-  file: File;
-}
 
 interface Props {
   accept?: string;
   multiple?: boolean;
   uploadedFile?: (files: FileList) => void;
-  render?: (files: FileUploadedListItem[]) => string | React.ReactNode;
 }
 
-const FileUpload: React.FC<Props> = ({
-  accept,
-  multiple,
-  uploadedFile,
-  render,
-}) => {
+const FileUpload: React.FC<Props> = ({ accept, multiple, uploadedFile }) => {
   const [uploadList, setUploadList] = useState<FileList>();
-  const [uploadedFileList, setUploadedFileList] = useState<
-    FileUploadedListItem[]
-  >([]);
+  const elFileInput = useRef<HTMLInputElement>(null);
 
   const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -37,30 +20,23 @@ const FileUpload: React.FC<Props> = ({
 
   const handleUpload = () => {
     if (uploadList) {
-      const newFile: FileUploadedListItem[] = Object.values(uploadList).map(
-        (item) => {
-          return {
-            name: item.name,
-            status: 'loading',
-            file: item,
-            progressCurrent: 0,
-            progressTotal: item.size,
-          };
-        }
-      );
-      setUploadedFileList([...uploadedFileList, ...newFile]);
       setUploadList(undefined);
       if (uploadedFile) {
         uploadedFile(uploadList);
+      }
+      if (elFileInput.current) {
+        elFileInput.current.value = '';
       }
     }
   };
 
   const renderFileName = (uploadList?: FileList) => {
     if (uploadList?.length) {
-      return Object.values(uploadList).reduce((acc, curr) => {
-        return acc + curr.name;
-      }, '');
+      const res: string[] = [];
+      Object.values(uploadList).forEach((item) => {
+        res.push(`"${item.name}"`);
+      });
+      return res.join(', ');
     }
     return (
       <span className="c-file-upload__placeholder--default">Select a file</span>
@@ -81,14 +57,19 @@ const FileUpload: React.FC<Props> = ({
             accept={accept}
             onChange={handleSelectFile}
             data-testid="fileInput"
+            ref={elFileInput}
           />
         </div>
-        <img className="c-file-upload__icon" src={ImgIconFolder} width="20" />
+        <img
+          className="c-file-upload__icon"
+          src={ImgIconFolder}
+          alt="upload-icon"
+          width="20"
+        />
       </label>
       <button className="c-button" onClick={handleUpload}>
         Upload
       </button>
-      {render && render(uploadedFileList)}
     </div>
   );
 };

@@ -9,7 +9,11 @@ import './App.css';
 function App() {
   return (
     <Provider store={store}>
-      <ToastContainer hideProgressBar={false} autoClose={false} />
+      <ToastContainer
+        hideProgressBar={false}
+        autoClose={false}
+        bodyClassName="toast-container"
+      />
       <div className="App">
         <div className="widget-container">
           <FileUploadWidget />

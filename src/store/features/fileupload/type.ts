@@ -1,5 +1,4 @@
 import { AxiosRequestConfig, Canceler } from 'axios';
-import { FileUploadedListItem as FileUploaded } from '../../../components/FileUpload/FileUpload';
 import actionTypeGenerator from '../../../utils/actionTypeGenerator';
 
 export const POST_FILE = actionTypeGenerator('fileupload/POST_FILE');
@@ -13,7 +12,15 @@ export const TRIGGER_POST_FILE_CANCEL = actionTypeGenerator(
   'fileupload/TRIGGER_POST_FILE_CANCEL'
 );
 
-export type FileUploadedListItem = FileUploaded;
+export interface FileUploadedListItem {
+  uuid: string;
+  name: string;
+  status: 'loading' | 'success';
+  progressCurrent: number;
+  progressTotal: number;
+  file: File;
+}
+
 export type CancelList = { [key: string]: Canceler };
 
 export interface FileUploadState {

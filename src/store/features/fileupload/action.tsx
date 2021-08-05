@@ -19,10 +19,12 @@ export const postFile =
   async (dispatch: Dispatch) => {
     dispatch({ type: POST_FILE.request });
     try {
+      const uploadTime = new Date().getTime();
       dispatch({
         type: POST_FILE.success,
         payload: Object.values(files).map((file: File) => {
           return {
+            uuid: uploadTime + file.name,
             name: file.name,
             status: 'loading',
             file: file,
@@ -35,7 +37,7 @@ export const postFile =
                 status="loading"
               />,
               {
-                toastId: file.name,
+                toastId: uploadTime + file.name,
               }
             ),
           };
@@ -60,7 +62,7 @@ export const postFile =
             const status = isFinished ? 'success' : 'loading';
 
             if (isFinished) {
-              toast.update(file.name, {
+              toast.update(uploadTime + file.name, {
                 render: () => (
                   <CustomToast
                     text={file.name}
@@ -74,6 +76,7 @@ export const postFile =
             dispatch({
               type: POST_FILE_PROGRESS.success,
               payload: {
+                uuid: uploadTime + file.name,
                 name: file.name,
                 progressCurrent: progressEvent.loaded,
                 progressTotal: progressEvent.total,
@@ -82,7 +85,7 @@ export const postFile =
             });
           },
           cancelToken: new CancelToken(function executor(cancelFunc) {
-            toast.update(file.name, {
+            toast.update(uploadTime + file.name, {
               render: () => (
                 <CustomToast
                   text={file.name}
@@ -94,7 +97,7 @@ export const postFile =
             dispatch({
               type: POST_FILE_CANCEL.success,
               payload: {
-                name: file.name,
+                uuid: uploadTime + file.name,
                 cancelFunc,
               },
             });
@@ -108,28 +111,33 @@ export const postFile =
   };
 
 export const cancelPostFile =
-  (name: string) => async (dispatch: Dispatch, getState: () => ReduxState) => {
+  (name: string, uuid: string) =>
+  async (dispatch: Dispatch, getState: () => ReduxState) => {
     dispatch({ type: TRIGGER_POST_FILE_CANCEL.request });
     try {
       const { cancelList, fileUploadedList } = getState().fileupload;
-      if (cancelList[name]) {
-        cancelList[name]();
-      }
 
-      if (
-        fileUploadedList.filter(
-          (item) => item.name === name && item.status !== 'success'
-        ).length
-      ) {
-        toast.update(name, {
-          render: () => <CustomToast text={name} status="error" />,
+      const canceledFile = fileUploadedList.filter(
+        (item) => item.uuid === uuid && item.status !== 'success'
+      );
+
+      if (canceledFile.length && canceledFile[0]?.uuid) {
+        toast.update(canceledFile[0].uuid, {
+          render: () => (
+            <CustomToast
+              text={name}
+              subtitle={bytesToSize(canceledFile[0]?.file?.size)}
+              status="error"
+            />
+          ),
         });
+        cancelList[canceledFile[0].uuid]();
       }
 
       dispatch({
         type: TRIGGER_POST_FILE_CANCEL.success,
         payload: {
-          name: name,
+          uuid: uuid,
         },
       });
     } catch (err) {

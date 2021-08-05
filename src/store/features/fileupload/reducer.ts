@@ -26,7 +26,7 @@ const fileUploadReducer = (
       return {
         ...state,
         fileUploadedList: state.fileUploadedList.map((item) => {
-          if (item.name === action.payload.name) {
+          if (item.uuid === action.payload.uuid) {
             return {
               ...item,
               progressCurrent: action.payload.progressCurrent,
@@ -42,14 +42,14 @@ const fileUploadReducer = (
         ...state,
         cancelList: {
           ...state.cancelList,
-          [action.payload.name]: action.payload.cancelFunc,
+          [action.payload.uuid]: action.payload.cancelFunc,
         },
       };
     case TRIGGER_POST_FILE_CANCEL.success:
       return {
         ...state,
         fileUploadedList: state.fileUploadedList.filter(
-          (item) => item.name !== action.payload.name
+          (item) => item.uuid !== action.payload.uuid
         ),
       };
     default:

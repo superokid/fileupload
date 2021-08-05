@@ -19,8 +19,8 @@ const FileUploadedList: React.FC<Props> = () => {
     (state) => state.fileupload.fileUploadedList
   );
 
-  const handleCancel = (name: string) => () => {
-    dispatch(cancelPostFile(name));
+  const handleCancel = (name: string, uuid: string) => () => {
+    dispatch(cancelPostFile(name, uuid));
   };
 
   if (!files.length) {
@@ -31,7 +31,7 @@ const FileUploadedList: React.FC<Props> = () => {
     <div className="c-file-upload-list">
       <div>Current uploads</div>
       {files.map((item) => (
-        <div key={item.name} className="c-file-upload-list__item">
+        <div key={item.uuid} className="c-file-upload-list__item">
           <div className="c-file-upload-list__text">{item.name}</div>
           {item.status === 'loading' && (
             <img
@@ -54,7 +54,9 @@ const FileUploadedList: React.FC<Props> = () => {
               item.progressTotal
             )}`}
           </div>
-          <button onClick={handleCancel(item.name)}>cancel</button>
+          <button onClick={handleCancel(item.name, item.uuid)}>
+            {item.status === 'loading' ? 'cancel' : 'remove'}
+          </button>
         </div>
       ))}
     </div>
